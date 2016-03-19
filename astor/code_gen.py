@@ -489,6 +489,23 @@ class SourceGenerator(ExplicitNodeVisitor):
     def visit_Bytes(self, node):
         self.write(repr(node.s))
 
+    # new in Python 3.6
+    def visit_JoinedStr(self, node):
+        self.write('f"')
+        for subvalue in node.values:
+            if isinstance(subvalue, ast.Str):
+                self.write(subvalue.s)
+            elif isinstance(subvalue, ast.FormattedValue):
+                self.visit_FormattedValue(subvalue)
+        self.write('"')
+
+    # new in Python 3.6
+    def visit_FormattedValue(self, node):
+        from pudb import set_trace as debug; debug()
+        self.write("{")
+        self.visit(node.value)
+        self.write("}")
+
     def visit_Num(self, node,
                   # constants
                   new=sys.version_info >= (3, 0)):

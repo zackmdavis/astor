@@ -185,6 +185,12 @@ class CodegenTestCase(unittest.TestCase):
                 pass"""
         self.assertAstSourceEqualIfAtLeastVersion(source, (3, 0))
 
+    def test_literal_string_interpolation(self):
+        source = """
+            a = f"{1} + {1} = {1 + 1}"
+        """
+        self.assertAstSourceEqualIfAtLeastVersion(source, (3, 6))
+
     def test_yield(self):
         source = "yield"
         self.assertAstEqual(source)
